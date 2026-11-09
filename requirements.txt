@@ -1,0 +1,3 @@
+PyQt5>=5.15
+pypinyin>=0.49
+pytest>=7.0

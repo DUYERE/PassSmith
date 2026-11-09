@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: pytest (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.12']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: 安装测试依赖
+        run: |
+          python -m pip install --upgrade pip
+          # 单元测试只导入 core/ 与 utils/，不 import PyQt5；
+          # 不装 PyQt5 可避免 Linux runner 上缺 xcb 等系统库的问题
+          pip install pypinyin pytest
+
+      - name: 运行单元测试
+        run: python -m pytest tests/ -q
+
+  package:
+    name: 打包验证 (Windows)
+    runs-on: windows-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+
+      - name: 安装打包依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: 开发环境自检
+        run: python main.py --selftest
+
+      - name: PyInstaller 打包
+        run: python build.py
+
+      - name: 产物自检
+        run: dist\PassSmith\PassSmith.exe --selftest
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: PassSmith-windows-${{ github.sha }}
+          path: dist/PassSmith/
+          retention-days: 7

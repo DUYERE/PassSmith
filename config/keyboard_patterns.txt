@@ -1,0 +1,16 @@
+# 常见键盘模式（每行一个）
+qwerty
+asdf
+zxcv
+qazwsx
+1234qwer
+qweasd
+1qaz2wsx
+1qaz@wsx
+1q2w3e4r
+123qwe
+qaz123
+abcd1234
+!@#$%^
+!@#$%^&*
+asdfgh

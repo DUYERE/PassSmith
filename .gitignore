@@ -1,0 +1,28 @@
+# Python 编译产物
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.deepeval/
+
+# 打包产物
+dist/
+build/
+*.spec.bak
+
+# 运行时产物（字典/templates/历史）
+output/
+/password_dict*.txt
+
+# 临时文件
+/_*.txt
+*.log
+
+# 本地项目元数据（AI 记忆等，不参与版本控制）
+.workbuddy/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
